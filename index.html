@@ -1,0 +1,130 @@
+<head>
+    <title>ww</title>
+    <script src="js/jquery.js"></script>
+    <link rel="stylesheet" href="css/project.css">
+
+</head>
+
+<html>
+    <table border="0" cellspacing="0" cellpadding="0">
+        
+
+    </table>
+
+    <p>
+
+
+    <script>
+
+        function rint()
+            {
+                return parseInt(Math.random()*100000000000)%1000000;
+            };
+
+        $(document).ready(function(){
+
+            var n=10;
+            var total=15;
+            var i,j,ww="";
+
+            var a = new Array();
+
+            for(i=0;i<=n+1;i++)
+            {
+                a[i] = new Array();
+                for(j=0;j<=n+1;j++)
+                    a[i][j] = 0;
+            }
+
+            var vis = new Array();
+
+            for(i=0;i<=n+1;i++)
+            {
+                vis[i] = new Array();
+                for(j=0;j<=n+1;j++)
+                    vis[i][j] = 0;
+            }
+
+
+            for(i=0;i<=n+1;i++) a[0][i] = '#';
+            for(i=0;i<=n+1;i++) a[i][0] = '#';
+            for(i=0;i<=n+1;i++) a[n+1][i] = '#';
+            for(i=0;i<=n+1;i++) a[i][n+1] = '#';
+            
+            
+            
+            for(i=1;i<total;i++)
+            {
+                var x = 0,y = 0;
+
+                for(x=rint()%n+1,y=rint()%n+1;a[x][y] == 1;x=rint()%n,y=rint()%n);
+
+                a[x][y]='M';
+            }
+
+            for(i=1;i<=n;i++)
+                for(j=1;j<=n;j++)
+                    if(a[i][j] != 'M')
+                        a[i][j] =   (a[i+1][j+1] == 'M' ? 1:0) + 
+                                    (a[i+1][j-1] == 'M' ? 1:0) + 
+                                    (a[i-1][j+1] == 'M' ? 1:0) + 
+                                    (a[i-1][j-1] == 'M' ? 1:0) + 
+                                    (a[i][j+1] == 'M' ? 1:0) + 
+                                    (a[i][j-1] == 'M' ? 1:0) + 
+                                    (a[i+1][j] == 'M' ? 1:0) + 
+                                    (a[i-1][j] == 'M' ? 1:0) ;
+                   
+            
+            for(i=1;i<=n;i++)
+            {
+                ww += '<tr>';
+                for(j=1;j<=n;j++)
+                {
+                    ww += '<td ' + 'x=' + i + ' y=' + j + ' class = "' + 'C-' + i + '-' + j + '">';
+                    
+                    ww += '<div class="shade"></div>';
+
+                    ww += '<div class="'
+                    ww += 'F'+a[i][j]+'">';
+                    // ww += a[i][j];
+                    ww += '</div>';
+                    
+
+                    ww += '</td>';
+                    
+                }
+                ww += '</tr>';
+            }
+            
+            $('table').html(ww);
+
+            function dfs(x,y)
+            {
+                console.log("DFS(" + x + ', ' + y +")");
+                $('.C-' + x + '-' + y).children(".shade").fadeTo("slow",0);
+                
+                if(a[x][y] == 0 && vis[x][y] == 0)
+                {
+                    vis[x][y]=1;
+
+                    dfs(x+1,y+1);
+                    dfs(x+1,y-1);
+                    dfs(x-1,y+1);
+                    dfs(x-1,y-1);
+                    dfs(x,y+1);
+                    dfs(x,y-1);
+                    dfs(x+1,y);
+                    dfs(x-1,y);
+                }
+            }
+
+            $('td').click(function(){
+                $(this).children(".shade").fadeTo("slow",0);
+                var x = $(this).attr("x");
+                var y = $(this).attr("y");
+                
+                if(a[x][y] == 0) dfs(parseInt(x),parseInt(y));
+            })
+        })
+    </script>
+</html>

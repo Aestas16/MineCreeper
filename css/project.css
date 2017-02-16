@@ -1,0 +1,51 @@
+td{
+    padding: 2px;
+    color: black;
+}
+.FM,.F0,.F1,.F2,.F3,.F4,.F5,.F6,.F7,.F8{
+    border-radius: 4px;
+
+    width: 40px;
+    height: 40px;
+}
+
+.FM{
+    background: #FF3300;
+}
+.F0{
+    /*background: ;*/
+}
+.F1{
+    background: #CCFF99;
+}
+.F2{
+    background: #FFFF66;
+}
+.F3{
+    background: #FFCC66;
+}
+.F4{
+    background: #FFCC99;
+}
+.F5{
+    background: #FF9999;
+}
+.F6{
+    background: #FF9966;
+}
+.F7{
+    background: #FF6666;
+}
+.F8{
+    background: #FF6600;
+}
+
+.shade{
+    background: #dddddd;
+    width: 40px;
+    height: 40px;
+
+    border-radius: 3px;
+    
+    float: left;
+}
