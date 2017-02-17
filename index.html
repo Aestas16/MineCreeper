@@ -1,14 +1,14 @@
 <head>
-    <title>ww</title>
+    <title>MineCreeper</title>
     <script src="js/jquery.js"></script>
     <link rel="stylesheet" href="css/project.css">
 
 </head>
 
 <html>
-    <table border="0" cellspacing="0" cellpadding="0">
-        
 
+    <table border="0" cellspacing="0" cellpadding="0">
+    
     </table>
 
     <p>
@@ -23,8 +23,12 @@
 
         $(document).ready(function(){
 
+            $(document).bind("contextmenu",function(e){
+                return false;
+            });
+
             var n=10;
-            var total=15;
+            var total=7;
             var i,j,ww="";
 
             var a = new Array();
@@ -45,6 +49,24 @@
                     vis[i][j] = 0;
             }
 
+            var is_Shade = new Array();
+
+            for(i=0;i<=n+1;i++)
+            {
+                is_Shade[i] = new Array();
+                for(j=0;j<=n+1;j++)
+                    is_Shade[i][j] = 1;
+            }
+
+            var is_Flag = new Array();
+
+            for(i=0;i<=n+1;i++)
+            {
+                is_Flag[i] = new Array();
+                for(j=0;j<=n+1;j++)
+                    is_Flag[i][j] = 0;
+            }
+
 
             for(i=0;i<=n+1;i++) a[0][i] = '#';
             for(i=0;i<=n+1;i++) a[i][0] = '#';
@@ -53,7 +75,7 @@
             
             
             
-            for(i=1;i<total;i++)
+            for(i=1;i<=total;i++)
             {
                 var x = 0,y = 0;
 
@@ -89,6 +111,8 @@
                     // ww += a[i][j];
                     ww += '</div>';
                     
+                    ww += '<div class="tag"></div>';
+                    
 
                     ww += '</td>';
                     
@@ -98,10 +122,51 @@
             
             $('table').html(ww);
 
+            function discover(x,y)
+            {
+                is_Shade[x][y]=0;
+
+                $('.C-' + x + '-' + y).children(".shade").fadeTo("fast",0);
+
+                if(a[x][y] == 'M') $('.C-' + x + '-' + y).children(".tag").text("✘");
+
+                if(a[x][y] == 0) $('.C-' + x + '-' + y).children(".tag").text(" ");
+
+                if(a[x][y] == 1) $('.C-' + x + '-' + y).children(".tag").text("1");
+                if(a[x][y] == 2) $('.C-' + x + '-' + y).children(".tag").text("2");
+                if(a[x][y] == 3) $('.C-' + x + '-' + y).children(".tag").text("3");
+                if(a[x][y] == 4) $('.C-' + x + '-' + y).children(".tag").text("4");
+                if(a[x][y] == 5) $('.C-' + x + '-' + y).children(".tag").text("5");
+                if(a[x][y] == 6) $('.C-' + x + '-' + y).children(".tag").text("6");
+                if(a[x][y] == 7) $('.C-' + x + '-' + y).children(".tag").text("7");
+                if(a[x][y] == 8) $('.C-' + x + '-' + y).children(".tag").text("8");
+            }
+
+            function win_discover(x,y)
+            {
+                is_Shade[x][y]=0;
+
+                $('.C-' + x + '-' + y).children(".shade").fadeTo("fast",0);
+
+                if(a[x][y] == 'M') $('.C-' + x + '-' + y).children(".tag").text("✓");
+
+                if(a[x][y] == 0) $('.C-' + x + '-' + y).children(".tag").text(" ");
+
+                if(a[x][y] == 1) $('.C-' + x + '-' + y).children(".tag").text("1");
+                if(a[x][y] == 2) $('.C-' + x + '-' + y).children(".tag").text("2");
+                if(a[x][y] == 3) $('.C-' + x + '-' + y).children(".tag").text("3");
+                if(a[x][y] == 4) $('.C-' + x + '-' + y).children(".tag").text("4");
+                if(a[x][y] == 5) $('.C-' + x + '-' + y).children(".tag").text("5");
+                if(a[x][y] == 6) $('.C-' + x + '-' + y).children(".tag").text("6");
+                if(a[x][y] == 7) $('.C-' + x + '-' + y).children(".tag").text("7");
+                if(a[x][y] == 8) $('.C-' + x + '-' + y).children(".tag").text("8");
+            }
+
             function dfs(x,y)
             {
+                discover(x,y);
                 console.log("DFS(" + x + ', ' + y +")");
-                $('.C-' + x + '-' + y).children(".shade").fadeTo("slow",0);
+                
                 
                 if(a[x][y] == 0 && vis[x][y] == 0)
                 {
@@ -118,12 +183,78 @@
                 }
             }
 
-            $('td').click(function(){
-                $(this).children(".shade").fadeTo("slow",0);
+            function numShade()
+            {
+                var i,j,ans=0;
+                for(i=1;i<=n;i++)
+                    for(j=1;j<=n;j++)
+                        if(is_Shade[i][j] == 1) ans++;
+                return ans;
+            }
+
+            function Lost()
+            {
+                var i,j;
+                for(i=1;i<=n;i++)
+                    for(j=1;j<=n;j++)
+                        discover(i,j);
+                setTimeout(function(){alert("You lost the game... QAQ");window.location.reload();},200);
+                
+            }
+
+            function Win()
+            {
+                var i,j;
+                for(i=1;i<=n;i++)
+                    for(j=1;j<=n;j++)
+                        win_discover(i,j);
+                setTimeout(function(){alert("You won the game! ^_^");window.location.reload();},200);
+                
+            }
+
+            $('td').mousedown(function(e){ 
+            if(e.which == 3)
+            {
                 var x = $(this).attr("x");
                 var y = $(this).attr("y");
+
+                if(is_Shade[x][y] == 1) {
+
+                    if(is_Flag[x][y] == 0)
+                    {
+                        is_Flag[x][y]=1;
+                        $('.C-' + x + '-' + y).children(".tag").text("F");
+                    }
+                    else
+                    {
+                        is_Flag[x][y]=0;
+                        $('.C-' + x + '-' + y).children(".tag").text(" ");
+                    }
+
+                    
+                }
+                
+            }
+            if(e.which == 1)
+            {                 
+                var x = $(this).attr("x");
+                var y = $(this).attr("y");
+
+                if(a[x][y] == 'M') {Lost();return;}
+
+                if(is_Flag[x][y] == 1) return;
+
+                discover(x,y);
                 
                 if(a[x][y] == 0) dfs(parseInt(x),parseInt(y));
+                
+            }
+
+            if(numShade() == total)
+            {
+                Win();
+            }
+
             })
         })
     </script>
